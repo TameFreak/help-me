@@ -2,14 +2,15 @@ module.exports = function count(s, pairs) {
 
   let N = calculateN(pairs);
   let counterRes = 0;
-
-  if (N > 10000000) return 0;
-
+  
   if (s === '1' && s.length === 1){
     counterRes = 1;
     pairs.forEach(item => counterRes *= (item[0] - 1));
     return counterRes;
   }
+  
+  if (N > 10000000) return 0;
+
 
   for (let i = 1; i <= N; i++){
     if (testNumber(s, i, N) === true){counterRes++};
