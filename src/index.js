@@ -1,32 +1,50 @@
 module.exports = function count(s, pairs) {
-
-  let N = calculateN(pairs);
-  let counterRes = 0;
   
+  let nForOne = pairs.reduce((acu, item) => acu * item[0], 1);
+  let counterRes = 0;
+
+
+
   if (s === '1' && s.length === 1){
-    counterRes = 1;
-    pairs.forEach(item => counterRes *= (item[0] - 1));
+    return pairs.reduce((acu, item) => acu * (item[0] - 1), 1);
+  }
+
+
+
+
+  if (pairs.length == 1 && pairs[0][1] > 100){
+
+    nForOne = pairs[0][0] ** 10;
+    counterRes = testAllN(s, nForOne);
+    pairs[0][1] = pairs[0][1] / 10;
+
+    for (let i = 0; i < pairs[0][1] - 1; i++){
+      counterRes = (counterRes * nForOne) % 1000000007;
+    }
     return counterRes;
   }
-  
-  if (N > 10000000) return 0;
 
 
-  for (let i = 1; i <= N; i++){
-    if (testNumber(s, i, N) === true){counterRes++};
-  }
 
-  return counterRes % 1000000007;
+  if (nForOne > 100000) nForOne %= 100000;
+
+  counterRes = testAllN(s, nForOne);
+  return pairs.reduce((acu, item) => acu = (acu * (item[0] ** ((item[1] - 1) % 100)) % 1000000007) % 1000000007, counterRes);
 }
 
-function calculateN(mas){
-  let n = 1;
 
-  for (let i = 0; i < mas.length; i++){
-    n *= Math.pow(mas[i][0], mas[i][1]);
+
+
+
+
+function testAllN (s, n){
+  let counter = 0;
+
+  for (let i = 1; i <= n; i++){
+    if (testNumber(s, i, n) === true){counter++};
   }
 
-  return n;
+  return counter;
 }
 
 
